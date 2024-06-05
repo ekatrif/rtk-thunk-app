@@ -1,7 +1,11 @@
 import styled from 'styled-components';
-import {useDispatch, useSelector} from 'react-redux';
-import { selectNeighbors } from '../store/details/details-selector';
+
 import { useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { selectNeighbors } from '../store/details/details-selector';
+
 import { loadNeighborsByBorder } from '../store/details/details-actions';
 
 const Wrapper = styled.section`
@@ -93,34 +97,37 @@ const Tag = styled.span`
 export const Info = (props) => {
   const {
     name,
-    nativeName,
-    flag,
+    flags,
     capital,
     population,
     region,
     subregion,
-    topLevelDomain,
-    currencies = [],
-    languages = [],
+    tld = [],
     borders = [],
     push,
+    currencies = {},
+    languages = {},
   } = props;
 
   const dispatch = useDispatch();
   const neighbors = useSelector(selectNeighbors);
 
   useEffect(() => {
-    if (borders.length) {
-      dispatch(loadNeighborsByBorder(borders));
+    if (borders?.length) {
+      dispatch(loadNeighborsByBorder(borders))
     }
-  }, [borders, dispatch]);
+  }, [borders, dispatch])
+
+  const nativeNameArr = name.nativeName;
+  const nativeKey = Object.keys(nativeNameArr)[0];
+  const nativeName = name.nativeName[nativeKey].official;
 
   return (
     <Wrapper>
-      <InfoImage src={flag} alt={name} />
+      <InfoImage src={flags.png} alt={flags.alt} />
 
       <div>
-        <InfoTitle>{name}</InfoTitle>
+        <InfoTitle>{name.common}</InfoTitle>
         <ListGroup>
           <List>
             <ListItem>
@@ -136,26 +143,26 @@ export const Info = (props) => {
               <b>Sub Region:</b> {subregion}
             </ListItem>
             <ListItem>
-              <b>Capital:</b> {capital}
+              <b>Capital:</b> {capital[0]}
             </ListItem>
           </List>
           <List>
             <ListItem>
               <b>Top Level Domain</b>{' '}
-              {topLevelDomain.map((d) => (
+              {tld?.map((d) => (
                 <span key={d}>{d}</span>
               ))}
             </ListItem>
             <ListItem>
               <b>Currency</b>{' '}
-              {currencies.map((c) => (
-                <span key={c.code}>{c.name} </span>
+              {Object.keys(currencies)?.map((key) => (
+                <span key={key}>{currencies[key].name} </span>
               ))}
             </ListItem>
             <ListItem>
               <b>Top Level Domain</b>{' '}
-              {languages.map((l) => (
-                <span key={l.name}>{l.name}</span>
+              {Object.keys(languages)?.map((key) => (
+                <span key={key}>{languages[key]}</span>
               ))}
             </ListItem>
           </List>
@@ -166,9 +173,9 @@ export const Info = (props) => {
             <span>There is no border countries</span>
           ) : (
             <TagGroup>
-              {neighbors.map((countryName) => (
-                <Tag key={countryName} onClick={() => push(`/country/${countryName}`)}>
-                  {countryName}
+              {neighbors.map((b) => (
+                <Tag key={b} onClick={() => push(`/country/${b}`)}>
+                  {b}
                 </Tag>
               ))}
             </TagGroup>

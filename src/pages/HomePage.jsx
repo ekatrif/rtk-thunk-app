@@ -35,7 +35,7 @@ export const HomePage = () => {
         {countries.map((c) => {
           const countryInfo = {
             img: c.flags.png,
-            name: c.name,
+            name: c.name.common,
             info: [
               {
                 title: 'Population',
@@ -47,15 +47,15 @@ export const HomePage = () => {
               },
               {
                 title: 'Capital',
-                description: c.capital,
+                description: c.capital[0],
               },
             ],
           };
 
           return (
             <Card
-              key={c.name}
-              onClick={() => navigate(`/country/${c.name}`)}
+              key={c.name.common}
+              onClick={() => navigate(`/country/${c.name.common}`)}
               {...countryInfo}
             />
           );
