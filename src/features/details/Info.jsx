@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-
-import { useEffect } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-
-import { selectNeighbors, loadNeighborsByBorder } from './details-slice';
+import { useNeighbours } from './useNeighbours';
 
 const Wrapper = styled.section`
   margin-top: 3rem;
@@ -107,14 +102,7 @@ export const Info = (props) => {
     languages = {},
   } = props;
 
-  const dispatch = useDispatch();
-  const neighbors = useSelector(selectNeighbors);
-
-  useEffect(() => {
-    if (borders?.length) {
-      dispatch(loadNeighborsByBorder(borders))
-    }
-  }, [borders, dispatch])
+  const neighbours = useNeighbours(borders);
 
   const nativeNameArr = name.nativeName;
   const nativeKey = Object.keys(nativeNameArr)[0];
@@ -171,7 +159,7 @@ export const Info = (props) => {
             <span>There is no border countries</span>
           ) : (
             <TagGroup>
-              {neighbors.map((b) => (
+              {neighbours.map((b) => (
                 <Tag key={b} onClick={() => push(`/country/${b}`)}>
                   {b}
                 </Tag>
