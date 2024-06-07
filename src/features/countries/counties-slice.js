@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const loadCountries = createAsyncThunk(
   'countries/loadCountries',
-  async (_,  {
+  (_,  {
     extra: { client, api }
   }) => {
     return client.get(api.ALL_COUNTRIES)
